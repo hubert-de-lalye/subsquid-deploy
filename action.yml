@@ -1,0 +1,41 @@
+name: "Deploy Squid"
+description: "Deploys a Squid project using Subsquid CLI"
+author: "Hubért de Lalye <hubert-de-lalye@protonmail.com>"
+
+inputs:
+  manifest:
+    description: "Path to the manifest file"
+    required: true
+  hard-reset:
+    description: "Perform a hard reset (true/false)"
+    required: false
+    default: "false"
+  deploymentKey:
+    description: "Subsquid deployment key (see https://docs.sqd.ai/squid-cli/installation/#1-obtain-a-sqd-cloud-deployment-key)"
+    required: true
+  organization:
+    description: "Subsquid organization"
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Install Subsquid CLI
+      shell: bash
+      run: npm i -g @subsquid/cli@latest
+
+    - name: Authenticate with Subsquid
+      shell: bash
+      run: |
+        sqd auth -k ${{ inputs.deploymentKey }}
+
+    - name: Deploy with Subsquid CLI
+      shell: bash
+      run: |
+        sqd deploy --org ${{ inputs.organization }} -m ${{ inputs.manifest }} . \
+        $([ "${{ inputs.hard-reset }}" == "true" ] && echo "--hard-reset")
