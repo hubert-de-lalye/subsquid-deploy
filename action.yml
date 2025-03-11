@@ -19,6 +19,9 @@ inputs:
   organization:
     description: "Subsquid organization"
     required: true
+  slot:
+    description: "Slot to deploy to"
+    required: false
 
 runs:
   using: "composite"
@@ -47,4 +50,5 @@ runs:
       shell: bash
       run: |
         sqd deploy --allow-update --org ${{ inputs.organization }} -m ${{ inputs.manifest }} . \
-        $([ "${{ inputs.hard-reset }}" == "true" ] && echo "--hard-reset") --no-interactive --no-stream-logs
+        $([ "${{ inputs.hard-reset }}" == "true" ] && echo "--hard-reset") --no-interactive --no-stream-logs \
+        $([ "${{ inputs.slot }}" != "" ] && echo "--slot ${{ inputs.slot }}")
