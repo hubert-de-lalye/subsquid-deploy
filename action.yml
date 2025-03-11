@@ -6,7 +6,6 @@ inputs:
   github-token:
     description: "GitHub token (optional, defaults to secrets.GITHUB_TOKEN)"
     required: false
-    default: ${{ secrets.GITHUB_TOKEN }}
   manifest:
     description: "Path to the manifest file"
     required: true
