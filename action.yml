@@ -3,6 +3,10 @@ description: "Deploys a Squid project using Subsquid CLI"
 author: "Hubért de Lalye <hubert-de-lalye@protonmail.com>"
 
 inputs:
+  github-token:
+    description: "GitHub token (optional, defaults to secrets.GITHUB_TOKEN)"
+    required: false
+    default: ${{ secrets.GITHUB_TOKEN }}
   manifest:
     description: "Path to the manifest file"
     required: true
@@ -10,7 +14,7 @@ inputs:
     description: "Perform a hard reset (true/false)"
     required: false
     default: "false"
-  deploymentKey:
+  deployment-key:
     description: "Subsquid deployment key (see https://docs.sqd.ai/squid-cli/installation/#1-obtain-a-sqd-cloud-deployment-key)"
     required: true
   organization:
@@ -24,7 +28,7 @@ runs:
       uses: actions/checkout@v4
       with:
         fetch-depth: 0
-        token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ inputs.github-token }}
 
     - name: Setup Node.js
       uses: actions/setup-node@v4
@@ -38,7 +42,7 @@ runs:
     - name: Authenticate with Subsquid
       shell: bash
       run: |
-        sqd auth -k ${{ inputs.deploymentKey }}
+        sqd auth -k ${{ inputs.deployment-key }}
 
     - name: Deploy with Subsquid CLI
       shell: bash
