@@ -47,4 +47,4 @@ runs:
       shell: bash
       run: |
         sqd deploy --allow-update --org ${{ inputs.organization }} -m ${{ inputs.manifest }} . \
-        $([ "${{ inputs.hard-reset }}" == "true" ] && echo "--hard-reset")
+        $([ "${{ inputs.hard-reset }}" == "true" ] && echo "--hard-reset") --no-interactive --no-stream-logs
